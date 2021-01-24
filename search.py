@@ -31,5 +31,3 @@ def search_movie(name):
     print("\n\n")
 
     #print(actor)
-
-search_movie("Inception")
