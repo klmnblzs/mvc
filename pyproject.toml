@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "mvc"
+version = "0.1.0"
+description = "Cli/Web Movie Recommender"
+authors = ["Kelemen Balazs <kelemnbalazs@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+colorama = "^0.4.4"
+inquirer = "^2.7.0"
+IMDbPY = "^2020.9.25"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+dlmy = 'mvc.main:main'
