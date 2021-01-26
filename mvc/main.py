@@ -4,18 +4,30 @@ import sys
 import getopt
 import inquirer
 from pprint import pprint
+from colorama import init, Fore
 
-# pip install inquirer
+# Initialize colorama
+init()
 
 
 def help():
     print(f"""
 
-Usage:
-    -h          show help
-    -s <title>  search for a movie
+{Fore.RED}mvc - movie recommender
 
-""")
+{Fore.BLUE}Usage:
+
+    {Fore.RED}-h{Fore.RESET}                    {Fore.BLUE}show help
+    {Fore.RED}-s|--search {Fore.GREEN}<title>   {Fore.BLUE}search for a movie
+    {Fore.RED}-t|--top{Fore.RESET}              {Fore.BLUE}choose from top movies
+
+{Fore.BLUE}Examples:
+
+    {Fore.RED}mvc -h{Fore.RESET}
+    {Fore.RED}mvc -s {Fore.GREEN}"The Matrix"
+    {Fore.RED}mvc -t{Fore.RESET}
+
+{Fore.RESET}""")
 
 
 def print_search(query):
@@ -25,12 +37,12 @@ def print_search(query):
     movie_genre = movie[2]
 
     if movie[2][1]:
-        print(f"\n\n{movie_title} - {movie_genre[0]}, {movie_genre[1]}")
+        print(f"\n\n{Fore.RED}{movie_title} - {Fore.GREEN}{movie_genre[0]}, {movie_genre[1]}")
     else:
-        print(f"\n\n{movie_title} - {movie_genre[0]}")
-    print(f"\n\n{movie_plot[0]}\n\n")
+        print(f"\n\n{Fore.RED}{movie_title} - {Fore.GREEN}{movie_genre[0]}")
+    print(f"\n\n{Fore.YELLOW}{movie_plot[0]}\n\n")
     if movie_plot[1]:
-        print(f"{movie_plot[1]}\n\n")
+        print(f"{Fore.YELLOW}{movie_plot[1]}\n\n{Fore.RESET}")
 
 
 def choose_from_top():
@@ -39,7 +51,7 @@ def choose_from_top():
     movies = [
         inquirer.List(
             "result",
-            message="Choose a movie:",
+            message=f"{Fore.RED}Choose a movie",
             choices=top,
         ),
     ]
