@@ -36,13 +36,17 @@ def print_search(query):
     movie_plot = movie[1]
     movie_genre = movie[2]
 
-    if movie[2][1]:
-        print(f"\n\n{Fore.RED}{movie_title} - {Fore.GREEN}{movie_genre[0]}, {movie_genre[1]}")
-    else:
-        print(f"\n\n{Fore.RED}{movie_title} - {Fore.GREEN}{movie_genre[0]}")
-    print(f"\n\n{Fore.YELLOW}{movie_plot[0]}\n\n")
-    if movie_plot[1]:
-        print(f"{Fore.YELLOW}{movie_plot[1]}\n\n{Fore.RESET}")
+    try:
+        print(f"\n\n{Fore.RED}{movie_title}{Fore.RESET} - {movie_genre[0]}, {movie_genre[1]}")
+    except:
+        print(f"\n\n{Fore.RED}{movie_title}{Fore.RESET} - {movie_genre[0]}")
+
+    print(f"\n\n{movie_plot[0]}\n\n")
+
+    try:
+        print(f"{movie_plot[1]}\n\n")
+    except:
+        return 0
 
 
 def choose_from_top():
