@@ -28,23 +28,28 @@ def help():
 
 
 def print_search(query):
-    movie = search.search_movie(query)
-    title = movie["title"]
-    genre = movie["genre"]
-    release = movie["release"]
-    plot = movie["plot"]
-    rating = movie["rating"]
-    poster_url = movie["poster_url"]
-    runtime = movie["runtime"]
+    m = search.Movie(title=query, api_key="f30ed61b")
+    movie = m.get_all_data()
+    title = movie["Title"]
+    genre = movie["Genre"]
+    year = movie["Year"]
+    runtime = movie["Runtime"]
+    plot = movie["Plot"]
+    poster = movie["Poster"]
+    rating = movie["imdbRating"]
+    actors = movie["Actors"]
 
     print(f"""
- {title} ({release}) {runtime} - {genre}
+  {title} ({year}) {runtime} - {genre}
 
- {rating}
+  {rating}
+
+👨 {actors}
 """)
+
     per_line = 79
     for i in range(0, len(plot), per_line):
-        print(f" {plot[i:i+per_line]}")
+        print(f"  {plot[i:i+per_line]}")
     print("")
 
 
@@ -54,7 +59,7 @@ def choose_from_top():
     movies = [
         inquirer.List(
             "result",
-            message=f"{fg(1)}Choose a movie",
+            message="Choose a movie",
             choices=top,
         ),
     ]

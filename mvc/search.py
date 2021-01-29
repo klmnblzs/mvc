@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 from imdb import IMDb
 import requests
+from dataclasses import dataclass
 
 ia=IMDb()
+api_url = 'http://www.omdbapi.com/'
 
 
 def get_top():
@@ -15,25 +17,21 @@ def get_top():
     return top
 
 
-def search_movie(query):
-    """
-    Search for a movie in Open Movie Database
-    Returns: details about movie
-    """
+@dataclass
+class Movie:
+    title: str
+    api_key: str
+    plot: str = None
 
-    api_key = "&apikey=f30ed61b"
-    url = 'http://www.omdbapi.com/?t={0}{1}'.format(
-        query, api_key)
-    response = requests.get(url)
+    def __post_init__(self):
+        payload = {'t': self.title, 'plot': self.plot, 'r': 'json', 'apikey': self.api_key}
+        self.values = requests.get(api_url, params=payload).json()
 
-    movie_details = {
-        'title': response.json()['Title'],
-        'genre': response.json()['Genre'],
-        'release': response.json()['Released'],
-        'plot': response.json()['Plot'],
-        'rating': response.json()['imdbRating'],
-        'poster_url': response.json()['Poster'],
-        'runtime': response.json()['Runtime'],
-    }
+    def get_all_data(self):
+        values = self.values if self.values['Response'] == 'True' else self.values['Error']
+        return values
 
-    return movie_details
+    def get_data(self, *args):
+        items = {item: self.values.get(item, 'key not found!') for item in args}
+
+        return items
