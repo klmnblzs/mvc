@@ -7,9 +7,9 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-colorama = "^0.4.4"
 inquirer = "^2.7.0"
 IMDbPY = "^2020.9.25"
+colored = "^1.4.2"
 
 [tool.poetry.dev-dependencies]
 
