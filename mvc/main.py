@@ -4,49 +4,48 @@ import sys
 import getopt
 import inquirer
 from pprint import pprint
-from colorama import init, Fore
-
-# Initialize colorama
-init()
+from colored import attr, fg
 
 
 def help():
     print(f"""
 
-{Fore.RED}mvc - movie recommender
+{fg(1)}mvc - movie recommender
 
-{Fore.BLUE}Usage:
+{fg(2)}Usage:
 
-    {Fore.RED}-h{Fore.RESET}                    {Fore.BLUE}show help
-    {Fore.RED}-s|--search {Fore.GREEN}<title>   {Fore.BLUE}search for a movie
-    {Fore.RED}-t|--top{Fore.RESET}              {Fore.BLUE}choose from top movies
+    {fg(3)}-h               {fg(1)}show help
+    {fg(3)}-s|--search      {fg(1)}search for a movie
+    {fg(3)}-t|--top         {fg(1)}choose from top movies
 
-{Fore.BLUE}Examples:
+{fg(2)}Examples:
 
-    {Fore.RED}mvc -h{Fore.RESET}
-    {Fore.RED}mvc -s {Fore.GREEN}"The Matrix"
-    {Fore.RED}mvc -t{Fore.RESET}
+    {fg(3)}mvc -h
+    {fg(3)}mvc -s {fg(4)}"The Matrix"
+    {fg(3)}mvc -t
 
-{Fore.RESET}""")
+{fg(7)}""")
 
 
 def print_search(query):
     movie = search.search_movie(query)
-    movie_title = movie[0]
-    movie_plot = movie[1]
-    movie_genre = movie[2]
+    title = movie["title"]
+    genre = movie["genre"]
+    release = movie["release"]
+    plot = movie["plot"]
+    rating = movie["rating"]
+    poster_url = movie["poster_url"]
+    runtime = movie["runtime"]
 
-    try:
-        print(f"\n\n{Fore.RED}{movie_title}{Fore.RESET} - {movie_genre[0]}, {movie_genre[1]}")
-    except:
-        print(f"\n\n{Fore.RED}{movie_title}{Fore.RESET} - {movie_genre[0]}")
+    print(f"""
+ {title} ({release}) {runtime} - {genre}
 
-    print(f"\n\n{movie_plot[0]}\n\n")
-
-    try:
-        print(f"{movie_plot[1]}\n\n")
-    except:
-        return 0
+ {rating}
+""")
+    per_line = 79
+    for i in range(0, len(plot), per_line):
+        print(f" {plot[i:i+per_line]}")
+    print("")
 
 
 def choose_from_top():
@@ -55,7 +54,7 @@ def choose_from_top():
     movies = [
         inquirer.List(
             "result",
-            message=f"{Fore.RED}Choose a movie",
+            message=f"{fg(1)}Choose a movie",
             choices=top,
         ),
     ]
@@ -65,7 +64,15 @@ def choose_from_top():
     print_search(query)
 
 
-def main():
+def notify(text, error=False):
+    """
+    Colored status wrapper
+    """
+    icon = f"{fg(9)}{attr(0)}" if error else f"{fg(10)}{attr(0)}"
+    print(f"\n {icon} {attr(2)}{text}{attr(0)}\n")
+
+
+if __name__ == "__main__":
     try:
         options, value = getopt.getopt(sys.argv[1:], 'hs:t', ["help", "search", "top"])
 
@@ -83,11 +90,18 @@ def main():
             else:
                 help()
 
+        # Work around to if no arguments given simply run the main function
+        # try:
+        #     if sys.argv[1] is None:
+        #         main()
+        # except IndexError:
+        #     main()
+
     except getopt.error:
         help()
 
     except KeyboardInterrupt:
         sys.exit()
 
-if __name__ == "__main__":
-    main()
+    # except:
+    #     help()
